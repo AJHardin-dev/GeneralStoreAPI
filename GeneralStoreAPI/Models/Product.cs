@@ -8,11 +8,13 @@ namespace GeneralStoreAPI.Models
 {
     public class Product
     {
-        [Key]
+        [Key][Required]
         public string Sku { get; set; }
-       
+
+        [Required]
         public string Name { get; set; }
         
+        [Required]
         public double Cost { get; set; }
         
         public int NumberInInventory { get; set; }
