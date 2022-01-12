@@ -1,6 +1,7 @@
 ﻿using GeneralStoreAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -29,5 +30,25 @@ namespace GeneralStoreAPI.Controllers
             else return BadRequest(ModelState);
         }
 
+        // GET all
+        // api/Product
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAll()
+        {
+            List<Product> products = await _context.Products.ToListAsync();
+            return Ok(products);
+        }
+
+        // get by id
+        // api/Product/{id}
+        [HttpGet]
+        public async Task<IHttpActionResult> GetBySku([FromUri] string sku)
+        {
+            Product product = await _context.Products.FindAsync(sku);
+
+            if (product != null)
+                return Ok(product);
+            else return NotFound();
+        }
     }
 }
