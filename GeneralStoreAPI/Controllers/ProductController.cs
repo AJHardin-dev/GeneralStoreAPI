@@ -30,7 +30,6 @@ namespace GeneralStoreAPI.Controllers
             else return BadRequest(ModelState);
         }
 
-        // GET all
         // api/Product
         [HttpGet]
         public async Task<IHttpActionResult> GetAll()
@@ -39,8 +38,7 @@ namespace GeneralStoreAPI.Controllers
             return Ok(products);
         }
 
-        // get by id
-        // api/Product/{id}
+        // api/Product?sku={sku}
         [HttpGet]
         public async Task<IHttpActionResult> GetBySku([FromUri] string sku)
         {
@@ -49,6 +47,30 @@ namespace GeneralStoreAPI.Controllers
             if (product != null)
                 return Ok(product);
             else return NotFound();
+        }
+
+        // api/Product?sku={sku}
+        [HttpPut]
+        public async Task<IHttpActionResult> UpdateProduct([FromUri] string sku, [FromBody] Product updatedProduct)
+        {
+            if (sku != updatedProduct?.Sku)
+                return BadRequest("Uri sku does not match product sku");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            Product product = await _context.Products.FindAsync(sku);
+
+            if (product == null)
+                return NotFound();
+
+            product.Name = updatedProduct.Name;
+            product.Cost = updatedProduct.Cost;
+            product.NumberInInventory = updatedProduct.NumberInInventory;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Product updated");
         }
     }
 }
