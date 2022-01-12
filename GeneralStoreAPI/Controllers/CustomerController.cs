@@ -12,7 +12,7 @@ namespace GeneralStoreAPI.Controllers
 {
     public class CustomerController : ApiController
     {
-        private readonly CustomerDbContext _context = new CustomerDbContext();
+        private readonly ProductDbContext _context = new ProductDbContext();
 
         // api/Customer
         [HttpPost]
@@ -84,7 +84,7 @@ namespace GeneralStoreAPI.Controllers
             _context.Customers.Remove(customer);
 
             if (await _context.SaveChangesAsync() == 1)
-                return Ok("Product deleted");
+                return Ok("Customer deleted");
 
             return InternalServerError();
         }

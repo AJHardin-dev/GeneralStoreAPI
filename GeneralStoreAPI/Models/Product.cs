@@ -19,6 +19,14 @@ namespace GeneralStoreAPI.Models
         
         public int NumberInInventory { get; set; }
         
-        public bool IsInStock { get; }
+        public bool IsInStock 
+        { 
+            get
+            {
+                if (NumberInInventory > 0)
+                    return true;
+                else return false;
+            }
+        }
     }
 }

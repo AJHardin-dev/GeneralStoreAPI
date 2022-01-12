@@ -219,16 +219,22 @@
     <Compile Include="Migrations\202201121802423_InitialMigration.designer.cs">
       <DependentUpon>202201121802423_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201122223288_SecondMigration.cs" />
+    <Compile Include="Migrations\202201122223288_SecondMigration.designer.cs">
+      <DependentUpon>202201122223288_SecondMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201122342440_OneFileOnly.cs" />
+    <Compile Include="Migrations\202201122342440_OneFileOnly.designer.cs">
+      <DependentUpon>202201122342440_OneFileOnly.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\CustomerDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductDbContext.cs" />
     <Compile Include="Models\Transaction.cs" />
-    <Compile Include="Models\TransactionDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -325,6 +331,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202201121802423_InitialMigration.resx">
       <DependentUpon>202201121802423_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201122223288_SecondMigration.resx">
+      <DependentUpon>202201122223288_SecondMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201122342440_OneFileOnly.resx">
+      <DependentUpon>202201122342440_OneFileOnly.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

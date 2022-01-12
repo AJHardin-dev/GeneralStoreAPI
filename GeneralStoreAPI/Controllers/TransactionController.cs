@@ -12,7 +12,7 @@ namespace GeneralStoreAPI.Controllers
 {
     public class TransactionController : ApiController
     {
-        private readonly TransactionDbContext _context = new TransactionDbContext();
+        private readonly ProductDbContext _context = new ProductDbContext();
 
         // api/Transaction
         // still to do:
@@ -103,7 +103,7 @@ namespace GeneralStoreAPI.Controllers
             _context.Transactions.Remove(transaction);
 
             if (await _context.SaveChangesAsync() == 2)
-                return Ok("Product deleted");
+                return Ok("Transaction deleted");
 
             return InternalServerError();
         }
