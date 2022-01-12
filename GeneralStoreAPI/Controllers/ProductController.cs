@@ -72,5 +72,22 @@ namespace GeneralStoreAPI.Controllers
 
             return Ok("Product updated");
         }
+
+        // api/Product?sku={sku}
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteProduct([FromUri] string sku)
+        {
+            Product product = await _context.Products.FindAsync(sku);
+
+            if (product == null)
+                return NotFound();
+
+            _context.Products.Remove(product);
+
+            if (await _context.SaveChangesAsync() == 1)
+                return Ok("Product deleted");
+
+            return InternalServerError();
+        }
     }
 }
