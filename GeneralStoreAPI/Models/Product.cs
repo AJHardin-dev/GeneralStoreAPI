@@ -17,7 +17,8 @@ namespace GeneralStoreAPI.Models
         [Required]
         public double Cost { get; set; }
         
-        public int NumberInInventory { get; set; }
+        [Range(0, int.MaxValue)]
+        public int NumberInInventory { get; set; } = 0;
         
         public bool IsInStock 
         { 
@@ -27,6 +28,16 @@ namespace GeneralStoreAPI.Models
                     return true;
                 else return false;
             }
+        }
+
+        public bool CheckStock(int fromOrderCount)
+        {
+            if (IsInStock)
+            {
+                if (NumberInInventory - fromOrderCount >= 0)
+                    return true;
+            }
+            return false;
         }
     }
 }

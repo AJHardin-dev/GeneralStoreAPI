@@ -17,6 +17,9 @@ namespace GeneralStoreAPI.Models
         [Required]
         public string LastName { get; set; }
 
-        public string FullName { get; }
+        public string FullName 
+        {
+            get { return FirstName + " " + LastName; }
+        }
     }
 }

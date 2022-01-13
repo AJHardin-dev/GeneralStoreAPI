@@ -15,23 +15,36 @@ namespace GeneralStoreAPI.Controllers
         private readonly ProductDbContext _context = new ProductDbContext();
 
         // api/Transaction
-        // still to do:
-        //    verify product is in stock
-        //    verify enough product to complete transaction
-        //    remove products that were purchased
         [HttpPost]
         public async Task<IHttpActionResult> PostTransaction([FromBody] Transaction model)
         {
             if (model == null)
                 return BadRequest("Can't be null");
-            else if (model != null && ModelState.IsValid)
-            {
-                _context.Transactions.Add(model);
-                await _context.SaveChangesAsync();
+            
+            else if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            else
+            { 
+                Product product = await _context.Products.FindAsync(model.ProductSku);
 
-                return Ok("Success");
+                if (product == null)
+                    return BadRequest("Could not find product sku for this transaction");
+                
+                else if (product.IsInStock == false)
+                    return BadRequest("Product out of stock");
+               
+                else if (!product.CheckStock(model.ItemCount))
+                    return BadRequest("Not enough stock to complete transaction");
+                
+                else
+                { 
+                    _context.Transactions.Add(model);
+                    product.NumberInInventory -= model.ItemCount;
+                    await _context.SaveChangesAsync();
+                    return Ok("Success");
+                }
             }
-            else return BadRequest(ModelState);
         }
 
         // api/Transaction
@@ -46,8 +59,21 @@ namespace GeneralStoreAPI.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAllByCustomerId (int customerId)
         {
-            // get all by cust id
-            return BadRequest("Not ready yet");
+            Customer customer = await _context.Customers.FindAsync(customerId);
+            
+            if (customer == null)
+                return NotFound();
+            else
+            {
+                List<Transaction> transactions = await _context.Transactions.ToListAsync();
+                List<Transaction> customerTransactions = new List<Transaction>{};
+                foreach (Transaction tx in transactions)
+                {
+                    if (tx.CustomerID == customerId)
+                        customerTransactions.Add(tx);
+                }
+                return Ok(customerTransactions);
+            }
         }
 
         // api/Transaction/{id}
@@ -98,8 +124,9 @@ namespace GeneralStoreAPI.Controllers
             if (transaction == null)
                 return NotFound();
 
-            // to do:
-            //    update product inventory
+            Product product = await _context.Products.FindAsync(transaction.ProductSku);
+
+            product.NumberInInventory += transaction.ItemCount;
             _context.Transactions.Remove(transaction);
 
             if (await _context.SaveChangesAsync() == 2)
